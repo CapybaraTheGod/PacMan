@@ -35,8 +35,12 @@ private:
 	// 게임이 계속 실행되어야 하는지 판단
 	bool mIsRunning{true};
 
+	// paddle의 위치
+	int mPaddleDir;
 	// 패들 위치
 	Vector2 mPaddlePos;
 	// 공의 위치
 	Vector2 mBallPos;
+	// 공의 속도
+	Vector2 mBallVel;
 };
