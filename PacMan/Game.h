@@ -1,6 +1,12 @@
 #pragma once
 #include <SDL2/SDL.h>
 
+struct Vector2
+{
+	float x;
+	float y;
+};
+
 class Game
 {
 public:
@@ -24,6 +30,13 @@ private:
 	SDL_Window* mWindow;
 	// 2D 그리기를 위한 Renderer
 	SDL_Renderer* mRenderer;
+	// 게임 시작 이후로 틱의 수
+	Uint32 mTicksCount{};
 	// 게임이 계속 실행되어야 하는지 판단
 	bool mIsRunning{true};
+
+	// 패들 위치
+	Vector2 mPaddlePos;
+	// 공의 위치
+	Vector2 mBallPos;
 };

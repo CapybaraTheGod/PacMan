@@ -1,8 +1,12 @@
 #include "Game.h"
 
+const int thickness = 15;
+const float paddleH = 100.f;
+
 // 생성자
 Game::Game()
 	: mWindow(nullptr)
+	, mTicksCount(0)
 	, mIsRunning(true)
 {
 }
@@ -47,6 +51,8 @@ bool Game::Initialize()
 		return false;
 	}
 
+	mBallPos.x = 1024.0f / 2.0f;
+	mBallPos.y = 768.0f / 2.0f;
 	return true;
 }
 
@@ -99,6 +105,25 @@ void Game::ProcessInput()
 // 게임 업데이트
 void Game::UpdateGame()
 {
+	// 마지막 프레임 이후로 16ms가 경과할 때 까지 대기
+	while (!SDL_TICKS_PASSED(SDL_GetTicks(), mTicksCount + 16))
+		;
+
+	// deltaTime = 현재 프레임 틱값과 이전 프레임 틱값의 차
+	// 차를 초 단위로 변환
+	float deltaTime = (SDL_GetTicks() - mTicksCount) / 1000.f;
+
+	// 최대 델타 시간값으로 고정
+	if (deltaTime > 0.05f)
+	{
+		deltaTime = 0.05f;
+	}
+
+	// 다음 프레임을 위한 틱값 갱신
+	mTicksCount = SDL_GetTicks();
+
+	// TODO: 델타 시간 함수로 게임 오브젝트 갱신
+	
 }
 
 // 출력 생성
@@ -114,6 +139,29 @@ void Game::GenerateOutput()
 	);
 	// 후면 버퍼 지우기
 	SDL_RenderClear(mRenderer);
+
+	// 벽 그리기
+	SDL_SetRenderDrawColor(mRenderer, 255, 255, 255, 255);
+
+	// 윗쪽 벽 그리기
+	SDL_Rect wall{
+		0, // 왼쪽 위 x 좌표 
+		0, // 왼쪽 위 y 좌표
+		1024, // Width
+		thickness // Height
+	};
+	SDL_RenderFillRect(mRenderer, &wall);
+
+	// SDL_Rect ball 구조체 초기화
+	SDL_Rect ball{
+		static_cast<int>(mBallPos.x - thickness/2),
+		static_cast<int>(mBallPos.y - thickness/2),
+		thickness,
+		thickness
+	};
+	// 공 그리기
+	SDL_RenderFillRect(mRenderer, &ball);
+
 	// 전면 버퍼와 후면 버퍼를 교환
 	SDL_RenderPresent(mRenderer);
 }
