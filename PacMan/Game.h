@@ -27,20 +27,23 @@ private:
 	void GenerateOutput();
 
 	// SDL이 생성한 윈도우
-	SDL_Window* mWindow;
+	SDL_Window* window;
 	// 2D 그리기를 위한 Renderer
-	SDL_Renderer* mRenderer;
+	SDL_Renderer* renderer;
 	// 게임 시작 이후로 틱의 수
 	Uint32 mTicksCount{};
 	// 게임이 계속 실행되어야 하는지 판단
-	bool mIsRunning{true};
+	bool IsRunning{true};
 
-	// paddle의 위치
+	// paddle 들의 위치
 	int mPaddleDir;
+	int nPaddleDir;
 	// 패들 위치
 	Vector2 mPaddlePos;
+	Vector2 nPaddlePos;
+
 	// 공의 위치
-	Vector2 mBallPos;
+	Vector2 ballPos;
 	// 공의 속도
-	Vector2 mBallVel;
+	Vector2 ballVel;
 };
