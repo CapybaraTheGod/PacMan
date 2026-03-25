@@ -1,6 +1,7 @@
 {
   "dependencies": [
     "sdl2",
+    "sdl2-image",
     "vcpkg-cmake",
     "vcpkg-cmake-config"
   ]
