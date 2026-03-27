@@ -1,29 +1,35 @@
+// Game.h
 #pragma once
 #include <SDL2/SDL.h>
+#include <vector>
 
 class Game
 {
 public:
-	Game();
+    Game();
+    // 세상을 켜고, 굴리고, 끄는 3대장 함수
+    bool Initialize();
+    void RunLoop();
+    void Shutdown();
 
-	// 게임 초기화
-	bool Initialize();
+    void AddActor(class Actor* actor);
+    void RemoveActor(class Actor* actor);
 
-	// 게임이 끝나기 전까지 게임 루프를 실행
-	void RunLoop();
-
-	// 게임 종료
-	void Shutdown();
 private:
-	// 게임 루프를 위한 헬퍼 함수
-	void ProcessInput();
-	void UpdateGame();
-	void GenerateOutput();
+    // RunLoop() 안에서 매 프레임마다 실행될 3단계
+    void ProcessInput();
+    void UpdateGame();
+    void GenerateOutput();
 
-	// SDL이 생성한 윈도우
-	SDL_Window* mWindow;
-	// 2D 그리기를 위한 Renderer
-	SDL_Renderer* mRenderer;
-	// 게임이 계속 실행되어야 하는지 판단
-	bool mIsRunning{true};
+    // SDL 창과 그림을 그릴 붓(Renderer)
+    SDL_Window* mWindow;
+    SDL_Renderer* mRenderer;
+
+    // 🌟 배우들을 관리할 명부와 상태 스위치!
+    std::vector<class Actor*> mActors;        // 현재 무대 위 배우들
+    std::vector<class Actor*> mPendingActors; // 대기실의 배우들
+    bool mUpdatingActors;                     // "지금 무대 업데이트 중?" 스위치
+
+    // 게임이 계속 실행 중인지 체크하는 스위치
+    bool mIsRunning;
 };
