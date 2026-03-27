@@ -15,6 +15,10 @@ public:
     void AddActor(class Actor* actor);
     void RemoveActor(class Actor* actor);
 
+    // 🌟 새롭게 추가할 그림 부품 관리 함수!
+    void AddSprite(class SpriteComponent* sprite);
+    void RemoveSprite(class SpriteComponent* sprite);
+
 private:
     // RunLoop() 안에서 매 프레임마다 실행될 3단계
     void ProcessInput();
@@ -29,6 +33,9 @@ private:
     std::vector<class Actor*> mActors;        // 현재 무대 위 배우들
     std::vector<class Actor*> mPendingActors; // 대기실의 배우들
     bool mUpdatingActors;                     // "지금 무대 업데이트 중?" 스위치
+
+    // 🌟 1. 모든 그림 부품들을 담아둘 '그리기 전용 명단'
+    std::vector<class SpriteComponent*> mSprites;
 
     // 게임이 계속 실행 중인지 체크하는 스위치
     bool mIsRunning;

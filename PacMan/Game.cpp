@@ -1,5 +1,8 @@
 #include "Game.h"
 #include "Actor.h"
+#include "SpriteComponent.h"
+
+
 Game::Game()
     :mWindow(nullptr)
     , mRenderer(nullptr)
@@ -86,6 +89,39 @@ void Game::ProcessInput()
     }
 }
 
+// 🌟 1. 그림 명단에 추가하기 (줄 세우기 알고리즘)
+void Game::AddSprite(SpriteComponent* sprite)
+{
+    // 내가 가진 번호표(mDrawOrder)를 확인합니다.
+    int myDrawOrder = sprite->GetDrawOrder();
+
+    // 명단의 처음부터 끝까지 훑어보면서 내가 들어갈 자리를 찾습니다!
+    auto iter = mSprites.begin();
+    for (; iter != mSprites.end(); ++iter)
+    {
+        // 만약 나보다 번호표 숫자가 '높은' 애를 발견했다면?
+        // "아! 내 자리는 저 녀석 바로 앞이구나!" 하고 멈춥니다(break).
+        if (myDrawOrder < (*iter)->GetDrawOrder())
+        {
+            break;
+        }
+    }
+
+    // 찾은 그 위치(iter)에 나를 쏙 집어넣습니다!
+    mSprites.insert(iter, sprite);
+}
+
+// 🌟 2. 그림 명단에서 삭제하기
+void Game::RemoveSprite(SpriteComponent* sprite)
+{
+    // 명단에서 나(sprite)를 찾아서 지워버립니다.
+    auto iter = std::find(mSprites.begin(), mSprites.end(), sprite);
+    if (iter != mSprites.end())
+    {
+        mSprites.erase(iter);
+    }
+}
+
 // 🌟 게임 루프의 핵심 심장부! (여기가 진짜 중요합니다)
 void Game::UpdateGame() {
     // (이 윗부분에는 프레임 속도 조절(Delta Time) 코드가 들어갑니다)
@@ -121,12 +157,16 @@ void Game::UpdateGame() {
 
 void Game::GenerateOutput() {
     // 1. 그리기 색상 설정 (R, G, B, A) -> 파란색
-    SDL_SetRenderDrawColor(mRenderer, 0, 0, 255, 255);
+    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
 
     // 2. 백 버퍼를 현재 색상으로 지우기
     SDL_RenderClear(mRenderer);
 
-    // 3. (나중에 여기에 캐릭터 등을 그릴 예정)
+    // 3. 그림 명단(mSprites)에 있는 모든 부품들을 순서대로 그린다!
+    for (auto sprite : mSprites)
+    {
+        sprite->Draw(mRenderer);
+    }
 
     // 4. 백 버퍼와 프론트 버퍼 교체 (화면 표시)
     SDL_RenderPresent(mRenderer);
